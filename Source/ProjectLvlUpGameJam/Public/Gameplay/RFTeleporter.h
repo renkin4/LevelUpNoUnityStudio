@@ -6,6 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "RFTeleporter.generated.h"
 
+class ARFPlatform;
+
+/**
+ * 
+ */
 UCLASS()
 class PROJECTLVLUPGAMEJAM_API ARFTeleporter : public AActor
 {
