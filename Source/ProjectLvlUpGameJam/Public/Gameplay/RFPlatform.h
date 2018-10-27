@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* PlatformSMC;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 	ARFTeleporter* AttachTeleporter;
 
 #if WITH_EDITORONLY_DATA

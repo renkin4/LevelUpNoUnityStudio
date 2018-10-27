@@ -21,7 +21,7 @@ public:
 		AllRFPlatforms.Reserve(5);
 	}
 
-	UPROPERTY(VisibleAnywhere, Category = "Platforms")
+	UPROPERTY(VisibleAnywhere, Transient, Category = "Platforms")
 	TArray<ARFPlatform*> AllRFPlatforms;
 };
 
@@ -37,8 +37,8 @@ public:
 	ARFPlatformManager();
 	
 	/**  */
-	UFUNCTION(CallInEditor, Category = "Platforms")
-	void DisplayPlatformLevels();
+	UFUNCTION()
+	void InitManager();
 	
 	/**  */
 	virtual void PostInitializeComponents() override;
@@ -47,7 +47,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	/** Levels */
-	UPROPERTY(VisibleAnywhere, Category = "Platforms", AdvancedDisplay)
+	UPROPERTY(VisibleAnywhere, Transient, Category = "Platforms", AdvancedDisplay)
 	TMap<uint8, FPlaformInfo> RFPlatforms;
 
 	UPROPERTY(EditAnywhere, Category = "Platforms")

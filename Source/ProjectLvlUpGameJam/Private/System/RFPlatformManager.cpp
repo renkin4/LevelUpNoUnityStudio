@@ -7,6 +7,8 @@
 
 ARFWorldSettings* ARFPlatformManager::WorldSettingInstance = nullptr;
 
+static int32 RandomizeIterateIndex = 0;
+
 ARFPlatformManager::ARFPlatformManager()
 {
 	bShouldRandomize = true;
@@ -20,8 +22,11 @@ void ARFPlatformManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InitManager();
+
 	if (bShouldRandomize)
 	{
+		RandomizeIterateIndex = StartingPlatform;
 		RandomizePlatform();
 	}
 
@@ -33,8 +38,6 @@ void ARFPlatformManager::BeginPlay()
 
 void ARFPlatformManager::RandomizePlatform()
 {
-	static int32 RandomizeIterateIndex = StartingPlatform;
-
 	if (RFPlatforms.Contains(RandomizeIterateIndex))
 	{
 		TArray<ARFPlatform*> & PlatformArrayRef = RFPlatforms[RandomizeIterateIndex].AllRFPlatforms;
@@ -81,7 +84,7 @@ void ARFPlatformManager::RandomizeSpeed()
 	}
 }
 
-void ARFPlatformManager::DisplayPlatformLevels()
+void ARFPlatformManager::InitManager()
 {
 	RFPlatforms.Reset();
 	RFPlatforms.Reserve(100);

@@ -4,6 +4,7 @@
 #include "RFWorldSettings.h"
 #include "RFCharacter.h"
 #include "RFTeleporter.h"
+#include "Components/StaticMeshComponent.h"
 
 #if WITH_EDITORONLY_DATA
 #include "Components/TextRenderComponent.h"
@@ -21,6 +22,9 @@ ARFPlatform::ARFPlatform()
 	CurrentPlatformLevel = 0;
 
 	PlatformSMC = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
+	PlatformSMC->SetCanEverAffectNavigation(false);
+	PlatformSMC->SetGenerateOverlapEvents(false);
+	PlatformSMC->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	RootComponent = PlatformSMC;
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -37,15 +41,14 @@ void ARFPlatform::PostEditMove(bool bFinished)
 {
 	Super::PostEditMove(bFinished);
 
-	if(bFinished)
-		CheckCurrentLevel();
+	//if(bFinished)
+	//	CheckCurrentLevel();
 }
 
 void ARFPlatform::PostEditUndo()
 {
 	Super::PostEditUndo();
-
-	CheckCurrentLevel();
+	/*CheckCurrentLevel();*/
 }
 
 void ARFPlatform::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
@@ -57,7 +60,7 @@ void ARFPlatform::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedE
 		if (AttachTeleporter != nullptr) 
 		{
 			AttachTeleporter->AttachedPlatform = this;
-			AttachTeleporter->TeleportTo(GetActorLocation(), GetActorRotation());
+			AttachTeleporter->TeleportTo(GetActorLocation() + FVector().UpVector * 90.f, GetActorRotation());
 		}
 	}
 
@@ -77,6 +80,11 @@ void ARFPlatform::PostInitializeComponents()
 
 	InitWorldSettings();
 	CheckCurrentLevel();
+
+	if (AttachTeleporter) 
+	{
+		AttachTeleporter->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	}
 }
 
 void ARFPlatform::CheckCurrentLevel()
