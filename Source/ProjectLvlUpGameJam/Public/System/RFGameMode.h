@@ -14,7 +14,4 @@ class PROJECTLVLUPGAMEJAM_API ARFGameMode : public AGameMode
 {
 	GENERATED_UCLASS_BODY()
 	
-	
-	
-	
 };
