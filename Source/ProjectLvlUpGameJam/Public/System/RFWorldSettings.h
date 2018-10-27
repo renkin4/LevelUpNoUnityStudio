@@ -32,4 +32,10 @@ public:
 	/** Maximum Height */
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay", AdvancedDisplay)
 	AActor* WorldBaseCeiling;
+
+	AActor* GetBaseFloor();
+
+protected:
+	virtual void PostInitializeComponents() override;
+
 };

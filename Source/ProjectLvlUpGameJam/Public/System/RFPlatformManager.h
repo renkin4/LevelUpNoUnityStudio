@@ -21,7 +21,7 @@ public:
 		AllRFPlatforms.Reserve(5);
 	}
 
-	UPROPERTY(VisibleAnywhere, Transient, Category = "Platforms")
+	UPROPERTY(VisibleAnywhere, Category = "Platforms")
 	TArray<ARFPlatform*> AllRFPlatforms;
 };
 
@@ -47,14 +47,27 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	/** Levels */
-	UPROPERTY(EditAnywhere , Category = "Platforms", AdvancedDisplay)
+	UPROPERTY(VisibleAnywhere, Category = "Platforms", AdvancedDisplay)
 	TMap<uint8, FPlaformInfo> RFPlatforms;
 
 	UPROPERTY(EditAnywhere, Category = "Platforms")
 	uint8 AmountOfPlatformPerLevel;
 
-protected:
+	UPROPERTY(EditAnywhere, Category = "Platforms")
+	uint8 StartingPlatform;
 
+protected:
+	virtual void BeginPlay() override;
+
+	void RandomizePlatform();
+
+	void RandomizeSpeed();
+
+	UPROPERTY(EditAnywhere , Category = "Flags")
+	uint8 bShouldRandomize :1;
+
+	UPROPERTY(EditAnywhere, Category = "Flags")
+	uint8 bShouldRandomizeSpeed : 1;
 
 private:
 	static ARFWorldSettings*  WorldSettingInstance;

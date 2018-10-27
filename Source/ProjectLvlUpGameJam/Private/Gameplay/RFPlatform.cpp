@@ -13,8 +13,6 @@ AActor* ARFPlatform::WorldPivot = nullptr;
 
 ARFWorldSettings* ARFPlatform::RFWorldSettingInstance = nullptr;
 
-AActor* ARFPlatform::WorldBaseFloor = nullptr;
-
 static float ImpulseForceAmount = 500.f;
 
 // Sets default values
@@ -85,10 +83,10 @@ void ARFPlatform::PostInitializeComponents()
 
 void ARFPlatform::CheckCurrentLevel()
 {
-	if (RFWorldSettingInstance
-		&& RFWorldSettingInstance->WorldBaseFloor)
+	if (IsValid(RFWorldSettingInstance)
+		&& IsValid(RFWorldSettingInstance->GetBaseFloor()))
 	{
-		const float BaseFloorHeight = RFWorldSettingInstance->WorldBaseFloor->GetActorLocation().Z;
+		const float BaseFloorHeight = RFWorldSettingInstance->GetBaseFloor()->GetActorLocation().Z;
 
 		CurrentPlatformLevel = FMath::Max(FMath::FloorToInt((GetActorLocation().Z - BaseFloorHeight) / RFWorldSettingInstance->DistanceBetweenPlatformLevels), 0);
 	}
@@ -111,7 +109,6 @@ void ARFPlatform::InitWorldSettings()
 	{
 		RFWorldSettingInstance = CastChecked<ARFWorldSettings>(World->GetWorldSettings());
 		WorldPivot = RFWorldSettingInstance->WorldPivot;
-		WorldBaseFloor = RFWorldSettingInstance->WorldBaseFloor;
 
 		if (WorldPivot)
 		{
@@ -148,5 +145,15 @@ void ARFPlatform::Tick(float DeltaTime)
 		}
 
 		RotateSpeed *= -1.f;
+	}
+}
+
+void ARFPlatform::RandomizeSpeed()
+{
+	if (CanRandomizeSpeed()) 
+	{
+		const float PreviousSpeed = RotateSpeed;
+
+		RotateSpeed = FMath::FRandRange(-PreviousSpeed, PreviousSpeed);
 	}
 }

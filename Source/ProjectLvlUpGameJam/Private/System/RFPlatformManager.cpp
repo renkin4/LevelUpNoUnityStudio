@@ -9,7 +9,76 @@ ARFWorldSettings* ARFPlatformManager::WorldSettingInstance = nullptr;
 
 ARFPlatformManager::ARFPlatformManager()
 {
+	bShouldRandomize = true;
+	bShouldRandomizeSpeed = false;
+
+	StartingPlatform = 1;
 	AmountOfPlatformPerLevel = 1;
+}
+
+void ARFPlatformManager::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (bShouldRandomize)
+	{
+		RandomizePlatform();
+	}
+
+	if (bShouldRandomizeSpeed)
+	{
+		RandomizeSpeed();
+	}
+}
+
+void ARFPlatformManager::RandomizePlatform()
+{
+	static int32 RandomizeIterateIndex = StartingPlatform;
+
+	if (RFPlatforms.Contains(RandomizeIterateIndex))
+	{
+		TArray<ARFPlatform*> & PlatformArrayRef = RFPlatforms[RandomizeIterateIndex].AllRFPlatforms;
+		if (PlatformArrayRef.Num() > AmountOfPlatformPerLevel)
+		{
+			const int32 PickUpLastIndex = PlatformArrayRef.Num() - 1;
+			const int32 RandomIndexToDelete = FMath::RandRange(0, PickUpLastIndex);
+
+			ARFPlatform* const PlatformToDelete = PlatformArrayRef[RandomIndexToDelete];
+
+			PlatformArrayRef.Remove(PlatformToDelete);
+			PlatformArrayRef.Shrink();
+
+			if (PlatformToDelete) 
+			{
+				PlatformToDelete->Destroy();
+			}
+
+			if (PlatformArrayRef.Num() <= AmountOfPlatformPerLevel) 
+			{
+				++RandomizeIterateIndex;
+			}
+			
+			RandomizePlatform();
+		}
+	}
+	else 
+	{
+		RandomizeIterateIndex = StartingPlatform;
+	}
+}
+
+void ARFPlatformManager::RandomizeSpeed()
+{
+	for (TActorIterator<AActor> ActorItr(GetWorld(), ARFPlatform::StaticClass()); ActorItr; ++ActorItr)
+	{
+		ARFPlatform* m_RFPlatform = Cast<ARFPlatform>(*ActorItr);
+
+		if (m_RFPlatform) 
+		{
+			m_RFPlatform->RandomizeSpeed();
+		}
+
+	}
 }
 
 void ARFPlatformManager::DisplayPlatformLevels()
@@ -41,6 +110,7 @@ void ARFPlatformManager::PostInitializeComponents()
 	{
 		WorldSettingInstance = Cast<ARFWorldSettings>(World->GetWorldSettings());
 	}
+
 }
 
 void ARFPlatformManager::OnConstruction(const FTransform & Transform)

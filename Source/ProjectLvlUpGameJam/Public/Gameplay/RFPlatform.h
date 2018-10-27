@@ -53,6 +53,9 @@ protected:
 	virtual void CheckCurrentLevel();
 
 	virtual void InitWorldSettings();
+	
+	UPROPERTY(EditAnywhere , Category = "Flags")
+	uint8 bCanRandomizeSpeed : 1;
 
 public:	
 	// Called every frame
@@ -65,12 +68,14 @@ public:
 
 	FORCEINLINE int32 GetCurrentPlatformLevel() const { return CurrentPlatformLevel; }
 
+	void RandomizeSpeed();
+
+	bool CanRandomizeSpeed() const { return bCanRandomizeSpeed; }
+
 private:
 	static AActor* WorldPivot;
 	
 	static ARFWorldSettings* RFWorldSettingInstance;
-
-	static AActor* WorldBaseFloor;
 
 	FVector RotatingAxis;
 
