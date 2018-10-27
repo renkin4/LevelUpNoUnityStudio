@@ -22,9 +22,15 @@ public:
 	// Sets default values for this character's properties
 	ARFCharacter();
 
+	//~ Begin AActor Interface
+	virtual void Tick(float DeltaTime) override;
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
+	//~ Begin APawn Interface
+	virtual void PossessedBy(AController* NewController) override;
+	//~ End APawn Interface
 
 	/** Interactor Component */
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
@@ -61,8 +67,6 @@ protected:
 	void ReleaseJump();
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

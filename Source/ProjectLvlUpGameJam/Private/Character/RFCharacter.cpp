@@ -50,6 +50,13 @@ void ARFCharacter::BeginPlay()
 	
 }
 
+void ARFCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	InteractorComp->InitInteractor(this, CastChecked<APlayerController>(Controller));
+}
+
 void ARFCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
@@ -126,5 +133,7 @@ void ARFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ARFCharacter::LookUpAtRate);
 
+	check(InteractorComp);
+	InteractorComp->SetupPlayerInputComponent(PlayerInputComponent);
 }
 
