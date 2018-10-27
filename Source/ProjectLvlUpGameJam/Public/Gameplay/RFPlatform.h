@@ -6,6 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "RFPlatform.generated.h"
 
+class ARFTeleporter;
+class UTextRenderComponent;
+
+/**
+ * 
+ */
 UCLASS()
 class PROJECTLVLUPGAMEJAM_API ARFPlatform : public AActor
 {
@@ -26,6 +32,16 @@ protected:
 	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* PlatformSMC;
+
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+	ARFTeleporter* AttachTeleporter;
+
+#if WITH_EDITORONLY_DATA
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UTextRenderComponent* TextRenderer;
+
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 
 public:	
 	// Called every frame

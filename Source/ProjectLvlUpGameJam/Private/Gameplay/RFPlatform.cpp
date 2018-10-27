@@ -3,6 +3,11 @@
 #include "RFPlatform.h"
 #include "RFWorldSettings.h"
 #include "RFCharacter.h"
+#include "RFTeleporter.h"
+
+#if WITH_EDITORONLY_DATA
+#include "Components/TextRenderComponent.h"
+#endif
 
 AActor* ARFPlatform::WorldPivot = nullptr;
 
@@ -18,7 +23,30 @@ ARFPlatform::ARFPlatform()
 	RootComponent = PlatformSMC;
 
 	PrimaryActorTick.bCanEverTick = true;
+
+#if WITH_EDITORONLY_DATA
+	TextRenderer = CreateEditorOnlyDefaultSubobject<UTextRenderComponent>(TEXT("Text Renderer"));
+	TextRenderer->SetupAttachment(RootComponent);
+#endif
 }
+
+#if WITH_EDITORONLY_DATA
+void ARFPlatform::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	const FName & PropertyName =( PropertyChangedEvent.Property != NULL )? PropertyChangedEvent.GetPropertyName() : NAME_None;
+
+	if (PropertyName == GET_MEMBER_NAME_CHECKED(ARFPlatform, AttachTeleporter)) 
+	{
+		if (AttachTeleporter != nullptr) 
+		{
+			AttachTeleporter->AttachedPlatform = this;
+			AttachTeleporter->TeleportTo(GetActorLocation(), GetActorRotation());
+		}
+	}
+
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+}
+#endif
 
 // Called when the game starts or when spawned
 void ARFPlatform::BeginPlay()
@@ -52,7 +80,7 @@ void ARFPlatform::Tick(float DeltaTime)
 
 	const FVector PreviousLocation = GetActorLocation();
 	// Copy the current loc to Next
-	const FVector NextLocation = GetActorLocation().RotateAngleAxis(RotateSpeed, RotatingAxis.GetSafeNormal());
+	const FVector NextLocation = GetActorLocation().RotateAngleAxis(RotateSpeed * DeltaTime, RotatingAxis.GetSafeNormal());
 	// Copy A new Rotation into Teleportation Logic
 	const FRotator NextRotation = FRotationMatrix::MakeFromX(RotatingAxis - GetActorLocation()).Rotator();
 	
@@ -64,7 +92,6 @@ void ARFPlatform::Tick(float DeltaTime)
 
 	if (HitResult.bBlockingHit) 
 	{
-		
 		ARFCharacter* const Character = Cast<ARFCharacter>(HitResult.GetActor());
 
 		if (IsValid(Character)) 
