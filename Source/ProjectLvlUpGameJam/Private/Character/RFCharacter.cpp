@@ -15,6 +15,8 @@ ARFCharacter::ARFCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
+	bAllowGameInputs = true;
+
 	JumpMaxCount = 2;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
@@ -61,7 +63,7 @@ void ARFCharacter::PossessedBy(AController* NewController)
 
 void ARFCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && AllowGameInputs())
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -75,7 +77,7 @@ void ARFCharacter::MoveForward(float Value)
 
 void ARFCharacter::MoveRight(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && AllowGameInputs())
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -90,12 +92,18 @@ void ARFCharacter::MoveRight(float Value)
 
 void ARFCharacter::TurnAtRate(float Rate)
 {
+	if (!AllowGameInputs())
+		return;
+
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * GetWorld()->GetDeltaSeconds());
 }
 
 void ARFCharacter::LookUpAtRate(float Rate)
 {
+	if (!AllowGameInputs())
+		return;
+
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * GetWorld()->GetDeltaSeconds());
 }
@@ -115,6 +123,11 @@ void ARFCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool ARFCharacter::AllowGameInputs() const
+{
+	return bAllowGameInputs;
 }
 
 // Called to bind functionality to input

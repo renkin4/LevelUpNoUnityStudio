@@ -25,6 +25,12 @@ public:
 
 	//~ Begin AActor Interface
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inputs")
+	uint8 bAllowGameInputs : 1;
+
+	bool AllowGameInputs() const;
+
 protected:
 	virtual void BeginPlay() override;
 	//~ End AActor Interface
