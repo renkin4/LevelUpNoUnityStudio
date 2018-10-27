@@ -20,7 +20,7 @@ static float ImpulseForceAmount = 500.f;
 // Sets default values
 ARFPlatform::ARFPlatform()
 {
-	RotateSpeed = 1.f;
+	RotateSpeed = 30.f;
 	RotatingAxis = FVector();
 	CurrentPlatformLevel = 0;
 
@@ -68,7 +68,6 @@ void ARFPlatform::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedE
 }
 #endif
 
-// Called when the game starts or when spawned
 void ARFPlatform::BeginPlay()
 {
 	Super::BeginPlay();
@@ -80,6 +79,7 @@ void ARFPlatform::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	InitWorldSettings();
+	CheckCurrentLevel();
 }
 
 void ARFPlatform::CheckCurrentLevel()
@@ -96,8 +96,10 @@ void ARFPlatform::CheckCurrentLevel()
 		InitWorldSettings();
 	}
 
+#if WITH_EDITORONLY_DATA
 	const FString CurrentLevelString = FString::Printf(TEXT("%d"), CurrentPlatformLevel);
-	TextRenderer->SetText(CurrentLevelString);
+	TextRenderer->SetText(FText::FromString(CurrentLevelString));
+#endif
 }
 
 void ARFPlatform::InitWorldSettings()
@@ -134,7 +136,8 @@ void ARFPlatform::Tick(float DeltaTime)
 
 	SetActorLocation(NextLocation, true, &HitResult);
 
-	if (HitResult.bBlockingHit) 
+	if (HitResult.bBlockingHit
+		&& !FMath::IsNearlyEqual(HitResult.ImpactNormal.Z,FVector().UpVector.Z * -1, 0.1f))
 	{
 		ARFCharacter* const Character = Cast<ARFCharacter>(HitResult.GetActor());
 
@@ -142,5 +145,7 @@ void ARFPlatform::Tick(float DeltaTime)
 		{
 			Character->LaunchCharacter((NextLocation- PreviousLocation).GetSafeNormal() * ImpulseForceAmount, true, false);
 		}
+
+		RotateSpeed *= -1.f;
 	}
 }
