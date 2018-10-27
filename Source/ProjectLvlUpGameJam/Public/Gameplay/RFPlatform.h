@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* PlatformSMC;
 
-	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
 	ARFTeleporter* AttachTeleporter;
 
 #if WITH_EDITORONLY_DATA
@@ -62,6 +62,8 @@ public:
 	float RotateSpeed;
 
 	FORCEINLINE AActor* GetWorldPivot() const { return WorldPivot; }
+
+	FORCEINLINE int32 GetCurrentPlatformLevel() const { return CurrentPlatformLevel; }
 
 private:
 	static AActor* WorldPivot;

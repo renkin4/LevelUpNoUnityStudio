@@ -41,7 +41,8 @@ void ARFPlatform::PostEditMove(bool bFinished)
 {
 	Super::PostEditMove(bFinished);
 
-	CheckCurrentLevel();
+	if(bFinished)
+		CheckCurrentLevel();
 }
 
 void ARFPlatform::PostEditUndo()
