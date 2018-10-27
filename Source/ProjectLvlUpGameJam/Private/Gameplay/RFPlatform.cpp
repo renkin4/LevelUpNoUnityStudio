@@ -13,8 +13,6 @@ AActor* ARFPlatform::WorldPivot = nullptr;
 
 ARFWorldSettings* ARFPlatform::RFWorldSettingInstance = nullptr;
 
-static float ImpulseForceAmount = 500.f;
-
 // Sets default values
 ARFPlatform::ARFPlatform()
 {
@@ -141,7 +139,7 @@ void ARFPlatform::Tick(float DeltaTime)
 
 		if (IsValid(Character)) 
 		{
-			Character->LaunchCharacter((NextLocation- PreviousLocation).GetSafeNormal() * ImpulseForceAmount, true, false);
+			Character->LaunchCharacter((NextLocation- PreviousLocation).GetSafeNormal() * RotateSpeed, true, false);
 		}
 
 		RotateSpeed *= -1.f;
