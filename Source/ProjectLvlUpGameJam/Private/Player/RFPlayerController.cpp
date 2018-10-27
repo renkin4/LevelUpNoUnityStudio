@@ -2,6 +2,7 @@
 
 #include "RFPlayerController.h"
 
-
-
-
+void ARFPlayerController::UnFreeze()
+{
+	ServerRestartPlayer();
+}

@@ -14,7 +14,7 @@ class PROJECTLVLUPGAMEJAM_API ARFPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	
-	
+protected:
+	virtual void UnFreeze() override;
 	
 };
