@@ -17,7 +17,7 @@ class PROJECTLVLUPGAMEJAM_API ARFWorldSettings : public AWorldSettings
 public:
 	/** Pivot */
 	UPROPERTY(EditInstanceOnly , Category = "Gameplay")
-	AActor* CylinderPivot;
+	AActor* WorldPivot;
 	
 	/** Distance between Levels */
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay", AdvancedDisplay)
