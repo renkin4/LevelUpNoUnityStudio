@@ -11,6 +11,10 @@
 
 AActor* ARFPlatform::WorldPivot = nullptr;
 
+ARFWorldSettings* ARFPlatform::RFWorldSettingInstance = nullptr;
+
+AActor* ARFPlatform::WorldBaseFloor = nullptr;
+
 static float ImpulseForceAmount = 500.f;
 
 // Sets default values
@@ -18,6 +22,7 @@ ARFPlatform::ARFPlatform()
 {
 	RotateSpeed = 1.f;
 	RotatingAxis = FVector();
+	CurrentPlatformLevel = 0;
 
 	PlatformSMC = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
 	RootComponent = PlatformSMC;
@@ -27,10 +32,25 @@ ARFPlatform::ARFPlatform()
 #if WITH_EDITORONLY_DATA
 	TextRenderer = CreateEditorOnlyDefaultSubobject<UTextRenderComponent>(TEXT("Text Renderer"));
 	TextRenderer->SetupAttachment(RootComponent);
+	TextRenderer->RelativeLocation = FVector().UpVector * 50.f;
 #endif
 }
 
 #if WITH_EDITORONLY_DATA
+void ARFPlatform::PostEditMove(bool bFinished)
+{
+	Super::PostEditMove(bFinished);
+
+	CheckCurrentLevel();
+}
+
+void ARFPlatform::PostEditUndo()
+{
+	Super::PostEditUndo();
+
+	CheckCurrentLevel();
+}
+
 void ARFPlatform::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	const FName & PropertyName =( PropertyChangedEvent.Property != NULL )? PropertyChangedEvent.GetPropertyName() : NAME_None;
@@ -59,18 +79,42 @@ void ARFPlatform::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	InitWorldSettings();
+}
+
+void ARFPlatform::CheckCurrentLevel()
+{
+	if (RFWorldSettingInstance
+		&& RFWorldSettingInstance->WorldBaseFloor)
+	{
+		const float BaseFloorHeight = RFWorldSettingInstance->WorldBaseFloor->GetActorLocation().Z;
+
+		CurrentPlatformLevel = FMath::Max(FMath::FloorToInt((GetActorLocation().Z - BaseFloorHeight) / RFWorldSettingInstance->DistanceBetweenPlatformLevels), 0);
+	}
+	else 
+	{
+		InitWorldSettings();
+	}
+
+	const FString CurrentLevelString = FString::Printf(TEXT("%d"), CurrentPlatformLevel);
+	TextRenderer->SetText(CurrentLevelString);
+}
+
+void ARFPlatform::InitWorldSettings()
+{
 	UWorld* const World = GetWorld();
 
-	if (World) 
+	if (World)
 	{
-		WorldPivot = CastChecked<ARFWorldSettings>(World->GetWorldSettings())->WorldPivot;
+		RFWorldSettingInstance = CastChecked<ARFWorldSettings>(World->GetWorldSettings());
+		WorldPivot = RFWorldSettingInstance->WorldPivot;
+		WorldBaseFloor = RFWorldSettingInstance->WorldBaseFloor;
 
-		if (WorldPivot) 
+		if (WorldPivot)
 		{
 			RotatingAxis = FVector(WorldPivot->GetActorLocation().X, WorldPivot->GetActorLocation().Y, GetActorLocation().Z);
 		}
 	}
-	
 }
 
 // Called every frame

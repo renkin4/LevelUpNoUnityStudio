@@ -15,6 +15,8 @@ class PROJECTLVLUPGAMEJAM_API ARFWorldSettings : public AWorldSettings
 	GENERATED_BODY()
 	
 public:
+	ARFWorldSettings();
+
 	/** Pivot */
 	UPROPERTY(EditInstanceOnly , Category = "Gameplay")
 	AActor* WorldPivot;

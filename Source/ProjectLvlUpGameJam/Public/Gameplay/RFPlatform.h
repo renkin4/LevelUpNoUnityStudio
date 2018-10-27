@@ -8,6 +8,7 @@
 
 class ARFTeleporter;
 class UTextRenderComponent;
+class ARFWorldSettings;
 
 /**
  * 
@@ -40,8 +41,18 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* TextRenderer;
 
+	virtual void PostEditMove(bool bFinished) override;
+	virtual void PostEditUndo() override;
+
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	int32 CurrentPlatformLevel;
+
+	virtual void CheckCurrentLevel();
+
+	virtual void InitWorldSettings();
 
 public:	
 	// Called every frame
@@ -55,6 +66,10 @@ public:
 private:
 	static AActor* WorldPivot;
 	
+	static ARFWorldSettings* RFWorldSettingInstance;
+
+	static AActor* WorldBaseFloor;
+
 	FVector RotatingAxis;
 
 };
