@@ -39,7 +39,7 @@ ARFCharacter::ARFCharacter()
 	FollowCamera->bUsePawnControlRotation = true;
 
 	// Interactor Component 
-	InteractorComp = CreateDefaultSubobject<UInteractableComp>(TEXT("Interactor Comp"))''
+	InteractorComp = CreateDefaultSubobject<UInteractorComp>(TEXT("Interactor Comp"));
 
 }
 
