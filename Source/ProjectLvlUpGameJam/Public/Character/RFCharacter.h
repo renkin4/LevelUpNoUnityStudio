@@ -9,6 +9,7 @@
 class UInteractorComp;
 class USpringArmComponent;
 class UCameraComponent;
+class ARFPickUp;
 
 /**
  * 
@@ -31,6 +32,9 @@ protected:
 	//~ Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+	TArray<ARFPickUp*> Inventory;
 
 	/** Interactor Component */
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
