@@ -84,7 +84,7 @@ protected:
 	EInteractState InteractState;
 
 	/** [Server] A Reference towards the Current Interactor that's Interacting with this */
-	UPROPERTY(Transient)
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Interactable")
 	UInteractorComp* CurrentInteractor;
 
 	/** Will by pass all Check Condition And Pass true to it */

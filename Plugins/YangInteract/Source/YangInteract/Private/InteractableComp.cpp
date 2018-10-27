@@ -122,7 +122,8 @@ bool UInteractableComp::CheckAvailability(EFailedReason & OutReason, UInteractor
 	{
 		OutReason = EFailedReason::FR_OthersInteracting;
 	}
-	else if (!InteractorIsAtAcceptableFrontDegree(CheckInteractor))
+	else if (bShouldBeInfront 
+		&&!InteractorIsAtAcceptableFrontDegree(CheckInteractor))
 	{
 		OutReason = EFailedReason::FR_NotInfrontInteractable;
 	}

@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "RFPickUp.generated.h"
 
-class UInteractableComp;
+class UInstantInteractableComp;
+class UBoxComponent;
 
 UCLASS()
 class PROJECTLVLUPGAMEJAM_API ARFPickUp : public AActor
@@ -21,8 +22,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/**  */
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
-	UInteractableComp* InteractableComp;
+	UInstantInteractableComp* InteractableComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* PickUPSMC;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Root", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* RootBox;
+
 };

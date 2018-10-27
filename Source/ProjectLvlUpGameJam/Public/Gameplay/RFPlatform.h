@@ -31,14 +31,14 @@ protected:
 	UFUNCTION(BlueprintPure, Category = "World", meta = (DisplayName = "Get World Pivot"))
 	AActor* K2_GetWorldPivot() const { return GetWorldPivot(); }
 	
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* PlatformSMC;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 	ARFTeleporter* AttachTeleporter;
 
 #if WITH_EDITORONLY_DATA
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* TextRenderer;
 
 	virtual void PostEditMove(bool bFinished) override;
@@ -47,7 +47,7 @@ protected:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
 	int32 CurrentPlatformLevel;
 
 	virtual void CheckCurrentLevel();
