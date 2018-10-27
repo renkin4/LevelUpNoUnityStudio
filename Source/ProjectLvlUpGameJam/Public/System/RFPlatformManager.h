@@ -6,6 +6,8 @@
 #include "GameFramework/Info.h"
 #include "RFPlatformManager.generated.h"
 
+class ARFWorldSettings;
+
 /**
  * 
  */
@@ -14,7 +16,22 @@ class PROJECTLVLUPGAMEJAM_API ARFPlatformManager : public AInfo
 {
 	GENERATED_BODY()
 	
+public:
+	ARFPlatformManager();
 	
+	/**  */
+	UFUNCTION(CallInEditor, Category = "Debug")
+	void DisplayPlatformLevels();
 	
-	
+	/**  */
+	virtual void PostInitializeComponents() override;
+
+	/**  */
+	virtual void OnConstruction(const FTransform& Transform) override;
+
+#if WITH_EDITOR
+#endif
+
+private:
+	static ARFWorldSettings*  WorldSettingInstance;
 };

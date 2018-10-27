@@ -14,7 +14,20 @@ class PROJECTLVLUPGAMEJAM_API ARFWorldSettings : public AWorldSettings
 {
 	GENERATED_BODY()
 	
+public:
+	/** Pivot */
+	UPROPERTY(EditInstanceOnly , Category = "Gameplay")
+	AActor* CylinderPivot;
 	
-	
-	
+	/** Distance between Levels */
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay", AdvancedDisplay)
+	float DistanceBetweenPlatformLevels;
+
+	/** Base Floor for calculating Distance for next level */
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay", AdvancedDisplay)
+	AActor* WorldBaseFloor;
+
+	/** Maximum Height */
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay", AdvancedDisplay)
+	AActor* WorldBaseCeiling;
 };
