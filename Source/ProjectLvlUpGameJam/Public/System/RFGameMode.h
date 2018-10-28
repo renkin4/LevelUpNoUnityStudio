@@ -6,6 +6,8 @@
 #include "GameFramework/GameMode.h"
 #include "RFGameMode.generated.h"
 
+class ARFWorldSettings;
+
 /**
  * 
  */
@@ -14,4 +16,8 @@ class PROJECTLVLUPGAMEJAM_API ARFGameMode : public AGameMode
 {
 	GENERATED_UCLASS_BODY()
 	
+public:
+	UFUNCTION(BlueprintPure, Category = "Gameplay")
+	ARFWorldSettings* GetRFWorldSettings() const;
+
 };

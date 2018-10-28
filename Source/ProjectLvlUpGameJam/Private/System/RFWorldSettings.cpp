@@ -5,6 +5,8 @@
 
 ARFWorldSettings::ARFWorldSettings()
 {
+	LevelRoundTime = 40;
+
 	DistanceBetweenPlatformLevels = 150.f;
 	KillZ = -1000.f;
 }

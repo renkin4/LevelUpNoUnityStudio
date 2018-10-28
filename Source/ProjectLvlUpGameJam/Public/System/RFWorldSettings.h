@@ -17,6 +17,9 @@ class PROJECTLVLUPGAMEJAM_API ARFWorldSettings : public AWorldSettings
 public:
 	ARFWorldSettings();
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+	int32 LevelRoundTime;
+
 	/** Pivot */
 	UPROPERTY(EditInstanceOnly , Category = "Gameplay")
 	AActor* WorldPivot;
@@ -34,6 +37,8 @@ public:
 	AActor* WorldBaseCeiling;
 
 	AActor* GetBaseFloor();
+
+
 
 protected:
 	virtual void PostInitializeComponents() override;
